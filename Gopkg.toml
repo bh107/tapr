@@ -1,0 +1,17 @@
+ignored = ["hpt.space/bltfs", "hpt.space/bltfs/backend/file", "hpt.space/bltfs/util/fsutil"]
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/golang/protobuf"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/jmoiron/sqlx"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/lib/pq"
+
+[[constraint]]
+  branch = "v2"
+  name = "gopkg.in/yaml.v2"

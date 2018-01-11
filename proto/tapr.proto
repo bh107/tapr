@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+package proto;
+
+message StatRequest {
+	string name = 1;
+}
+
+message StatResponse {
+	int64 size = 1;
+}
+
+
+message PushPrepareRequest {
+	string name = 1;
+	int64 offset = 2;
+	bool append = 3;
+
+	bool dataset = 4;
+}
+
+message PushPrepareResponse {
+	bytes tx = 1;
+	bytes error = 2;
+}
+
+// PushRequest is sent as the first message to the push endpoint, followed
+// by a stream of Chunk messages.
+message PushRequest {
+	bytes tx = 1;
+}
+
+message PushResponse {
+	bytes error = 1;
+}
+
+message PushLogRequest {
+	bytes tx = 1;
+}
+
+message PushLogEntry {
+	int64 seq = 1;
+	bytes error = 2;
+}
+
+message PullPrepareRequest {
+	string name = 1;
+	int64 offset = 2;
+}
+
+message PullPrepareResponse {
+	bytes tx = 1;
+	bytes error = 2;
+}
+
+message PullRequest {
+	bytes tx = 1;
+}
+
+message Chunk {
+	// name of the data contained in the chunk
+	string name = 1;
+
+	// contained data
+	bytes data = 2;
+
+	// error (used only in pull)
+	bytes error = 3;
+}
+
+message Vector {
+	bool split = 1;
+	repeated string names = 2;
+	repeated bytes values = 3;
+}
+
+enum LogLevel {
+	Debug = 0;
+	Info = 1;
+	Warning = 2;
+	Error = 3;
+	Disabled = 4;
+}
+
+message LogTailRequest {
+	LogLevel level = 1;
+}
+
+message LogEvent {
+	LogLevel level = 1;
+	string message = 2;
+}

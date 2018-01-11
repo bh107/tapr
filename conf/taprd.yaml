@@ -1,0 +1,68 @@
+stores: {
+  "default": {
+    backend: "fs",
+
+    root: "/tmp/tapr"
+  },
+
+  "archive": {
+    backend: "tape",
+    format: "ltfs",
+
+    cleaning-prefix: "CLN",
+
+    inventory: {
+      driver: "postgres",
+      options: {
+        dbname: "tapr",
+        username: "tapr",
+        password: "secret"
+      }
+    },
+
+    changers: {
+      "primary": {
+        driver: "fake",
+        options: {
+          transfer: 4,
+          storage: 32,
+          ix: 4,
+          volumes: 16,
+        }
+      },
+
+      "secondary": {
+        driver: "mtx",
+        options: {
+          path: "/dev/changer",
+        }
+      }
+    },
+
+    drives: {
+      read: {
+        "st0": {
+          slot: 0,
+          driver: "fake",
+        },
+
+        "st1": {
+          slot: 1,
+          driver: "fake",
+        },
+      },
+
+      write: {
+        "st2": {
+          slot: 2,
+          driver: "fake",
+        },
+
+        "st3": {
+          slot: 3,
+          driver: "fake",
+        }
+      }
+    }
+  }
+}

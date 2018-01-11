@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package proto;
+
+// Location represents a location in a tape library
+message Location {
+  int64 addr = 1;
+	string category = 2;
+}
+
+// Volumes represents a tape library volume.
+message Volume {
+  // serial is the volume serial (VOLSER)
+	string serial = 1;
+
+  // location is the current location (e.g. (0, transfer), indicating
+  // the volume is loaded into the first transfer element)
+  Location location = 2;
+
+  // if currently mounted, home holds the home storage location.
+	Location home = 3;
+
+  // the volume category
+	enum Category {
+		UNKNOWN = 0;
+		ALLOCATING = 1;
+		FILLING = 2;
+		SCRATCH = 3;
+		FULL = 4;
+		MISSING = 5;
+		DAMAGED = 6;
+		CLEANING = 7;
+	}
+
+	Category category = 4;
+
+  // implementation specific volume flags
+	uint32 flags = 5;
+}
+
+message StatusRequest {}
+
+message StatusResponse {
+	repeated Volume volumes = 1;
+	bytes error = 2;
+}
