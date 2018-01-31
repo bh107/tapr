@@ -3,6 +3,7 @@ package scsi // import "hpt.space/tapr/store/tape/drive/scsi"
 
 import (
 	"hpt.space/tapr/errors"
+	"hpt.space/tapr/store/tape"
 	"hpt.space/tapr/store/tape/changer"
 	"hpt.space/tapr/store/tape/drive"
 	"hpt.space/tapr/store/tape/inv"
@@ -19,10 +20,10 @@ type impl struct {
 var _ drive.Drive = (*impl)(nil)
 
 // New returns a new scsi tape drive implementation.
-func New(opts map[string]interface{}) (drive.Drive, error) {
+func New(name string, cfg tape.DriveConfig) (drive.Drive, error) {
 	const op = "drive/scsi.New"
 
-	path, ok := opts["path"].(string)
+	path, ok := cfg.Options["path"]
 	if !ok {
 		return nil, errors.E(op, errors.Str("the path option must be specified"))
 	}
@@ -32,6 +33,6 @@ func New(opts map[string]interface{}) (drive.Drive, error) {
 	}, nil
 }
 
-func (drv *impl) Setup(inv inv.Inventory, chgr changer.Changer) {
+func (drv *impl) Setup(invdb inv.Inventory, chgr changer.Changer) {
 	panic("not implemented")
 }

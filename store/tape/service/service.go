@@ -2,6 +2,7 @@ package service
 
 import (
 	"os"
+	"sync"
 
 	"hpt.space/tapr"
 	"hpt.space/tapr/config"
@@ -15,7 +16,7 @@ import (
 )
 
 func init() {
-	store.Register("tape", New)
+	store.Register("store/tape", New)
 }
 
 type service struct {
@@ -26,7 +27,7 @@ type service struct {
 type dataService struct {
 	inv    inv.Inventory
 	chgr   changer.Changer
-	drives []drive.Drive
+	drives map[string]drive.Drive
 }
 
 var _ store.Store = (*service)(nil)
@@ -79,22 +80,27 @@ func New(name string, _cfg config.StoreConfig) (store.Store, error) {
 	}
 
 	// setup drives
-	var drvs []drive.Drive
-	for _, drv := range cfg.Drives.Read {
-		drvOpts := make(map[string]interface{})
-		for k, v := range drv.Options {
-			drvOpts[k] = v
-		}
-
-		drv, err := drive.Create(drv.Driver, drvOpts)
+	drvs := map[string]drive.Drive{}
+	var wg sync.WaitGroup
+	for name, drvCfg := range cfg.Drives.Write {
+		drv, err := drive.Create(name, drvCfg.Driver, drvCfg)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		drv.Setup(invdb, chgr)
+		wg.Add(1)
 
-		drvs = append(drvs, drv)
+		go func() {
+			drv.Setup(invdb, chgr)
+			wg.Done()
+		}()
+
+		drvs[name] = drv
 	}
+
+	wg.Wait()
+
+	log.Debug.Printf("%s: drives ready", op)
 
 	return &service{
 		name: name,

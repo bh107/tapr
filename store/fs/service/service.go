@@ -11,8 +11,8 @@ import (
 )
 
 func init() {
-	config.Register("fs", configurator)
-	store.Register("fs", New)
+	config.Register("store/fs", configurator)
+	store.Register("store/fs", New)
 }
 
 func configurator(c *config.StoreConfig, unmarshal func(interface{}) error) error {

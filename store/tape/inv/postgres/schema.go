@@ -23,7 +23,7 @@ var resetSchema = []string{
 	)`,
 
 	`CREATE TYPE volume_location AS (
-		addr int,
+		addr integer,
 		category slot_category
 	)`,
 

@@ -37,7 +37,7 @@ func Launch(loc tape.Location, vol *tape.Volume, invdb inv.Inventory, chgr chang
 }
 
 // Constructor is a function that creates a Drive.
-type Constructor func(map[string]interface{}) (Drive, error)
+type Constructor func(name string, cfg tape.DriveConfig) (Drive, error)
 
 var registration = make(map[string]Constructor)
 
@@ -53,19 +53,19 @@ func Register(name string, fn Constructor) error {
 	return nil
 }
 
-// Create creates a new Drive using the named implementation.
-func Create(name string, cfg map[string]interface{}) (Drive, error) {
-	const op = "drive.Create"
-
-	fn, found := registration[name]
-	if !found {
-		return nil, errors.E(op, errors.Invalid, errors.Strf("unknown drive backend type: %v", name))
-	}
-
-	return fn(cfg)
-}
-
 // A Drive is a tape drive.
 type Drive interface {
 	Setup(inv.Inventory, changer.Changer)
+}
+
+// Create creates a new Drive using the named implementation.
+func Create(name, backend string, cfg tape.DriveConfig) (Drive, error) {
+	const op = "drive.Create"
+
+	fn, found := registration[backend]
+	if !found {
+		return nil, errors.E(op, errors.Invalid, errors.Strf("unknown drive backend type: %v", backend))
+	}
+
+	return fn(name, cfg)
 }

@@ -1,12 +1,12 @@
 stores: {
   "default": {
-    backend: "fs",
+    backend: "store/fs",
 
     root: "/tmp/tapr"
   },
 
   "archive": {
-    backend: "tape",
+    backend: "store/tape",
     format: "ltfs",
 
     cleaning-prefix: "CLN",

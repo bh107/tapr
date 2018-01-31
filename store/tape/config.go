@@ -3,7 +3,7 @@ package tape
 import "hpt.space/tapr/config"
 
 func init() {
-	config.Register("tape", configurator)
+	config.Register("store/tape", configurator)
 }
 
 func configurator(c *config.StoreConfig, unmarshal func(interface{}) error) error {

@@ -59,6 +59,9 @@ type Inventory interface {
 	// and mounts it into the device at the given destination.
 	Alloc() (tape.Volume, error)
 
+	// Loaded returns whether or not the given drive is loaded.
+	Loaded(tape.Location) (bool, error)
+
 	// Status returns a list of known volumes.
 	Volumes() ([]tape.Volume, error)
 

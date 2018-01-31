@@ -2,6 +2,7 @@
 package postgres // import "hpt.space/tapr/store/tape/inv/postgres"
 
 import (
+	"database/sql"
 	"fmt"
 	"strings"
 	"sync"
@@ -414,6 +415,30 @@ func (p *postgres) Transfer(serial tape.Serial, dst tape.Location, chgr changer.
 	}
 
 	return nil
+}
+
+func (p *postgres) Loaded(loc tape.Location) (bool, error) {
+	const op = "inv/postgres.Loaded"
+
+	var r int
+
+	err := p.db.Get(&r, `
+		SELECT 1
+		FROM volumes
+		WHERE
+			location = ($1::integer,slot_category('transfer'))
+	`, loc.Addr)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return false, nil
+		}
+
+		log.Error.Print(loc)
+		return false, errors.E(op, err)
+	}
+
+	return true, nil
 }
 
 func (p *postgres) Alloc() (vol tape.Volume, err error) {
