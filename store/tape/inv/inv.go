@@ -36,7 +36,8 @@ func Create(name string, cfg map[string]string) (Inventory, error) {
 	return fn(cfg)
 }
 
-// An Inventory tracks volumes in a tape store.
+// An Inventory tracks volumes in a tape store. An inventory MUST be safe for
+// concurrent use.
 type Inventory interface {
 	// Load transfers a volume to a drive in the context of
 	// the given tape.

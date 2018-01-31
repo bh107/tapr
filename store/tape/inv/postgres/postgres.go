@@ -83,7 +83,7 @@ func New(opts map[string]string) (inv.Inventory, error) {
 
 	return &postgres{
 		db:             db,
-		prefixCleaning: opts["prefix-cleaning"],
+		prefixCleaning: opts["cleaning-prefix"],
 	}, nil
 }
 

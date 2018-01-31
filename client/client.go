@@ -161,7 +161,6 @@ func (c *Client) PushFile(name tapr.PathName, rd io.Reader, append bool) error {
 			}
 
 			b, err := pb.Marshal(&proto.Chunk{
-				Tx:   prepareResp.Tx,
 				Data: buf[:n],
 			})
 			if err != nil {

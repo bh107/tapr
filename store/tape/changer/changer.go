@@ -34,7 +34,8 @@ func Create(name string, cfg map[string]interface{}) (Changer, error) {
 	return fn(cfg)
 }
 
-// A Changer is an automated media changer.
+// A Changer is an automated media changer. A changer MUST be safe for
+// concurrent use.
 type Changer interface {
 	// Transfer moves media from src to dst.
 	//

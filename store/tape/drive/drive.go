@@ -67,4 +67,5 @@ func Create(name string, cfg map[string]interface{}) (Drive, error) {
 
 // A Drive is a tape drive.
 type Drive interface {
+	Setup(inv.Inventory, changer.Changer)
 }

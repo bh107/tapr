@@ -10,7 +10,6 @@ message StatResponse {
 	int64 size = 1;
 }
 
-
 message PushPrepareRequest {
 	string name = 1;
 	int64 offset = 2;

@@ -29,13 +29,6 @@ stores: {
           ix: 4,
           volumes: 16,
         }
-      },
-
-      "secondary": {
-        driver: "mtx",
-        options: {
-          path: "/dev/changer",
-        }
       }
     },
 

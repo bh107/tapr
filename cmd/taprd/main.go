@@ -23,6 +23,9 @@ import (
 	// changer implementations
 	_ "hpt.space/tapr/store/tape/changer/fake"
 	_ "hpt.space/tapr/store/tape/changer/mtx"
+
+	// drive implementation
+	_ "hpt.space/tapr/store/tape/drive/fake"
 )
 
 func main() {

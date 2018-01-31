@@ -3,7 +3,9 @@ package scsi // import "hpt.space/tapr/store/tape/drive/scsi"
 
 import (
 	"hpt.space/tapr/errors"
+	"hpt.space/tapr/store/tape/changer"
 	"hpt.space/tapr/store/tape/drive"
+	"hpt.space/tapr/store/tape/inv"
 )
 
 func init() {
@@ -28,4 +30,8 @@ func New(opts map[string]interface{}) (drive.Drive, error) {
 	return &impl{
 		path: path,
 	}, nil
+}
+
+func (drv *impl) Setup(inv inv.Inventory, chgr changer.Changer) {
+	panic("not implemented")
 }
