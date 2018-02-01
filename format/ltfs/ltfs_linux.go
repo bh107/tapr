@@ -65,43 +65,47 @@ func New(cfg tape.FormatConfig) (format.Formatter, error) {
 }
 
 // Format formats the volume.
-func (f *fmtr) Format(devpath string, serial tape.Serial) (storage.Storage, error) {
+func (f *fmtr) Format(devpath string, vol tape.Volume) (formatted bool, stg storage.Storage, err error) {
 	fi, err := os.Stat(devpath)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return nil, errors.E(errors.Invalid, errors.Strf("%s does not exist", devpath))
+			return false, nil, errors.E(errors.Invalid, errors.Strf("%s does not exist", devpath))
 		}
 
-		return nil, err
+		return false, nil, err
 	}
 
 	if flags.EmulateDevices {
 		if !fi.IsDir() {
-			return nil, errors.E(errors.Invalid, errors.Strf("%s is not a directory", devpath))
+			return false, nil, errors.E(errors.Invalid, errors.Strf("%s is not a directory", devpath))
 		}
 	}
 
-	opts := []string{
-		fmt.Sprintf("--device=%s", devpath),
-		fmt.Sprintf("--tape-serial=%s", serial[:6]),
+	if vol.Category == tape.Allocated {
+		opts := []string{
+			fmt.Sprintf("--device=%s", devpath),
+			fmt.Sprintf("--tape-serial=%s", vol.Serial[:6]),
+		}
+
+		if flags.EmulateDevices {
+			opts = append(opts, fmt.Sprintf("--backend=file"))
+		}
+
+		cmd := exec.Command(mkltfsCommand, opts...)
+
+		log.Debug.Printf("running: %s (args: %v)", cmd.Path, cmd.Args[1:])
+
+		_, err = execCmd(cmd)
+		if err != nil {
+			return false, nil, errors.E(err, "failed to format volume")
+		}
+
+		formatted = true
 	}
 
-	if flags.EmulateDevices {
-		opts = append(opts, fmt.Sprintf("--backend=file"))
-	}
-
-	cmd := exec.Command(mkltfsCommand, opts...)
-
-	log.Debug.Printf("running: %s (args: %v)", cmd.Path, cmd.Args)
-
-	_, err = execCmd(cmd)
-	if err != nil {
-		return nil, errors.E(err, "failed to format volume")
-	}
-
-	return &impl{
+	return formatted, &impl{
 		devpath:   devpath,
-		mountpath: filepath.Join(f.mountdir, string(serial)),
+		mountpath: filepath.Join(f.mountdir, string(vol.Serial)),
 	}, nil
 }
 
@@ -127,7 +131,7 @@ func (f *impl) Mount() error {
 
 	cmd := exec.Command(ltfsCommand, opts...)
 
-	log.Debug.Printf("running: %s (args: %v)", cmd.Path, cmd.Args)
+	log.Debug.Printf("running: %s (args: %v)", cmd.Path, cmd.Args[1:])
 
 	if _, err := execCmd(cmd); err != nil {
 		return errors.E(err, "failed to mount volume")

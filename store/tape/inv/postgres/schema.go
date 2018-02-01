@@ -15,7 +15,7 @@ var resetSchema = []string{
 	// create types
 	`CREATE TYPE volume_category AS ENUM (
 		-- order 'filling' before 'scratch'
-		'unknown', 'allocating', 'filling', 'scratch', 'full', 'missing', 'damaged', 'cleaning'
+		'unknown', 'allocating', 'allocated', 'filling', 'scratch', 'full', 'missing', 'damaged', 'cleaning'
 	)`,
 
 	`CREATE TYPE slot_category AS ENUM (

@@ -9,6 +9,7 @@ import (
 
 	"tapr.space/bitmask"
 	"tapr.space/errors"
+	"tapr.space/log"
 	"tapr.space/sim"
 	"tapr.space/store/tape"
 	"tapr.space/store/tape/changer"
@@ -181,6 +182,8 @@ func (chgr *changerImpl) Load(src, dst tape.Location) error {
 
 	srcSlot := &chgr.slots[src.Category][src.Addr]
 	dstSlot := &chgr.slots[dst.Category][dst.Addr]
+
+	log.Debug.Printf("%s: loading from %v to %v", op, srcSlot, dstSlot)
 
 	sim.Maybe(func(state sim.State) {
 		v := srcSlot.Volume

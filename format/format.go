@@ -26,7 +26,7 @@ func Register(name string, fn Constructor) error {
 
 // Formatter is something that can format itself.
 type Formatter interface {
-	Format(devpath string, serial tape.Serial) (storage.Storage, error)
+	Format(devpath string, vol tape.Volume) (formatted bool, stg storage.Storage, err error)
 }
 
 // Mounter specifices that the format can be mounted.

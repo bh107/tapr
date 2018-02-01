@@ -18,6 +18,7 @@ type VolumeCategory int
 const (
 	UnknownVolume VolumeCategory = iota
 	Allocating
+	Allocated
 	Scratch
 	Filling
 	Full
@@ -60,7 +61,12 @@ func FormatVolumeFlags(f uint32) string {
 		out = append(out, "formatted")
 	}
 
-	return strings.Join(out, ",")
+	str := strings.Join(out, ",")
+	if str == "" {
+		str = "none"
+	}
+
+	return str
 }
 
 // A Volume is an usable volume.
@@ -82,7 +88,9 @@ type Volume struct {
 }
 
 func (v *Volume) String() string {
-	return fmt.Sprintf("%s/%s,%s)", v.Serial, v.Category, FormatVolumeFlags(v.Flags))
+	return fmt.Sprintf("[%v %v (loc: %v) (home: %v) (flags: %s)]",
+		v.Serial, v.Category, v.Location, v.Home, FormatVolumeFlags(v.Flags),
+	)
 }
 
 // String implements fmt.Stringer.
@@ -92,6 +100,8 @@ func (cat VolumeCategory) String() string {
 		return "unknown"
 	case Allocating:
 		return "allocating"
+	case Allocated:
+		return "allocated"
 	case Scratch:
 		return "scratch"
 	case Filling:
@@ -116,6 +126,8 @@ func ToVolumeCategory(str string) VolumeCategory {
 		return UnknownVolume
 	case "allocating":
 		return Allocating
+	case "allocated":
+		return Allocated
 	case "scratch":
 		return Scratch
 	case "filling":

@@ -263,7 +263,7 @@ func (p *postgres) Load(serial tape.Serial, dst tape.Location, chgr changer.Chan
 	`
 
 	if r.Category == tape.Allocating {
-		r.Category = tape.Filling
+		r.Category = tape.Allocated
 	}
 
 	if _, err := p.db.Exec(stmt, dst.Addr, dst.Category, r.Category, fmt.Sprintf("%b", r.Flags), r.Serial); err != nil {
@@ -417,13 +417,11 @@ func (p *postgres) Transfer(serial tape.Serial, dst tape.Location, chgr changer.
 	return nil
 }
 
-func (p *postgres) Loaded(loc tape.Location) (loaded bool, vol tape.Volume, err error) {
+func (p *postgres) Loaded(loc tape.Location) (loaded bool, serial tape.Serial, err error) {
 	const op = "inv/postgres.Loaded"
 
-	var r rvol
-
-	err = p.db.Get(&r, `
-		SELECT serial, location, home, category, flags
+	err = p.db.Get(&serial, `
+		SELECT serial
 		FROM volumes
 		WHERE
 			location = ($1::integer,slot_category('transfer'))
@@ -431,20 +429,14 @@ func (p *postgres) Loaded(loc tape.Location) (loaded bool, vol tape.Volume, err 
 
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return false, vol, nil
+			return false, serial, nil
 		}
 
 		log.Error.Print(loc)
-		return false, vol, errors.E(op, err)
+		return false, serial, errors.E(op, err)
 	}
 
-	return true, tape.Volume{
-		Serial:   r.Serial,
-		Location: r.Location,
-		Home:     r.Home,
-		Category: r.Category,
-		Flags:    r.Flags,
-	}, nil
+	return true, serial, nil
 }
 
 func (p *postgres) Info(serial tape.Serial) (tape.Volume, error) {
@@ -471,12 +463,38 @@ func (p *postgres) Info(serial tape.Serial) (tape.Volume, error) {
 	}, nil
 }
 
-func (p *postgres) Alloc() (vol tape.Volume, err error) {
+func (p *postgres) Update(vol tape.Volume) error {
+	const op = "inv/postgres.Update"
+
+	stmt := `
+		UPDATE volumes
+		SET
+			location = ($1, $2),
+			home = ($3, $4),
+			category = $5,
+			flags = $6
+		WHERE serial = $7
+	`
+
+	_, err := p.db.Exec(stmt,
+		vol.Location.Addr, vol.Location.Category,
+		vol.Home.Addr, vol.Home.Category,
+		vol.Category, fmt.Sprintf("%b", vol.Flags),
+		vol.Serial,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (p *postgres) Alloc() (serial tape.Serial, err error) {
 	const op = "inv/postgres.Alloc"
 
 	tx, err := p.db.Beginx()
 	if err != nil {
-		return vol, err
+		return serial, err
 	}
 
 	var r rvol
@@ -492,32 +510,30 @@ func (p *postgres) Alloc() (vol tape.Volume, err error) {
 	`
 
 	if err := tx.Get(&r, stmt); err != nil {
-		return vol, rollback(op, tx, err)
+		return serial, rollback(op, tx, err)
 	}
 
+	serial = r.Serial
+
 	if r.Category != tape.Filling {
+		r.Category = tape.Allocating
+
 		stmt = `
 			UPDATE volumes
-			SET category = 'allocating'
-			WHERE serial = $1
+			SET category = $1
+			WHERE serial = $2
 		`
 
-		if _, err = tx.Exec(stmt, r.Serial); err != nil {
-			return vol, rollback(op, tx, err)
+		if _, err = tx.Exec(stmt, r.Category, r.Serial); err != nil {
+			return serial, rollback(op, tx, err)
 		}
 	}
 
 	if err := commit(op, tx); err != nil {
-		return vol, err
+		return serial, err
 	}
 
-	return tape.Volume{
-		Serial:   r.Serial,
-		Location: r.Location,
-		Home:     r.Home,
-		Category: r.Category,
-		Flags:    r.Flags,
-	}, nil
+	return serial, nil
 }
 
 // Reset resets the inventory database.

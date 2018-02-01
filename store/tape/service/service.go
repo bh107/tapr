@@ -45,19 +45,12 @@ func New(name string, _cfg config.StoreConfig) (store.Store, error) {
 		log.Fatal(err)
 	}
 
-	vols, err := invdb.Volumes()
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	// reset the database if requested
 	if flags.ResetDB {
 		log.Debug.Printf("%s: resetting inventory database", op)
 		if err := invdb.Reset(); err != nil {
 			log.Fatal(err)
 		}
-
-		vols = nil
 	}
 
 	// setup changer
@@ -67,7 +60,16 @@ func New(name string, _cfg config.StoreConfig) (store.Store, error) {
 	}
 
 	chgrOpts["cleaning-prefix"] = cfg.CleaningPrefix
-	chgrOpts["vols"] = vols
+
+	if flags.EmulateDevices {
+		vols, err := invdb.Volumes()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		chgrOpts["vols"] = vols
+	}
+
 	chgr, err := changer.Create(cfg.Changers["primary"].Driver, chgrOpts)
 	if err != nil {
 		log.Fatal(err)

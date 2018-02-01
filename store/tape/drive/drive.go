@@ -54,7 +54,7 @@ func New(name string, cfg tape.DriveConfig) (*Drive, error) {
 func (drv *Drive) Start(invdb inv.Inventory, chgr changer.Changer, fmtr format.Formatter) error {
 	op := fmt.Sprintf("drive/fake.Setup[%s (slot %d) (path %s)]", drv.name, drv.loc.Addr, drv.devpath)
 
-	loaded, vol, err := invdb.Loaded(drv.loc)
+	loaded, serial, err := invdb.Loaded(drv.loc)
 	if err != nil {
 		return err
 	}
@@ -63,22 +63,34 @@ func (drv *Drive) Start(invdb inv.Inventory, chgr changer.Changer, fmtr format.F
 		log.Debug.Printf("%s: drive is empty, allocating", op)
 		// get a volume from the inventory if we do not already have a
 		// volume mounted
-		vol, err = invdb.Alloc()
+		serial, err = invdb.Alloc()
 		if err != nil {
 			return err
 		}
 
-		log.Debug.Printf("%s: loading %v into %v", op, vol.Serial, drv.loc)
+		log.Debug.Printf("%s: loading %v into %v", op, serial, drv.loc)
 
-		if err := invdb.Load(vol.Serial, drv.loc, chgr); err != nil {
+		if err := invdb.Load(serial, drv.loc, chgr); err != nil {
 			return err
 		}
 	}
 
-	// format the volume
-	stg, err := fmtr.Format(drv.devpath, vol.Serial)
+	vol, err := invdb.Info(serial)
 	if err != nil {
 		return err
+	}
+
+	// format the volume if necessary
+	formatted, stg, err := fmtr.Format(drv.devpath, vol)
+	if err != nil {
+		return err
+	}
+
+	if formatted {
+		vol.Category = tape.Filling
+		if err := invdb.Update(vol); err != nil {
+			return err
+		}
 	}
 
 	// mount if needed

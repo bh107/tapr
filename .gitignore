@@ -1,2 +1,8 @@
 # vendoring
 vendor/
+
+# blobs
+blobs/
+
+# vagrant
+.vagrant/

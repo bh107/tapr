@@ -129,5 +129,5 @@ type Slot struct {
 }
 
 func (s *Slot) String() string {
-	return fmt.Sprintf("<Slot: addr=%d type=%v v=%v>", s.Addr, s.Category, s.Volume)
+	return fmt.Sprintf("(%d,%s)", s.Addr, s.Category)
 }

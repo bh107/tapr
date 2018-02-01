@@ -57,13 +57,16 @@ type Inventory interface {
 
 	// Alloc allocates a filling (or scratch) volume from the inventory
 	// and mounts it into the device at the given destination.
-	Alloc() (tape.Volume, error)
+	Alloc() (tape.Serial, error)
 
 	// Loaded returns whether or not the given drive is loaded.
-	Loaded(tape.Location) (bool, tape.Volume, error)
+	Loaded(tape.Location) (bool, tape.Serial, error)
 
 	// Status returns a list of known volumes.
 	Volumes() ([]tape.Volume, error)
+
+	// Update updates volume information
+	Update(tape.Volume) error
 
 	// Info retrieves info about a volume.
 	Info(tape.Serial) (tape.Volume, error)
