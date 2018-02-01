@@ -20,7 +20,10 @@ func configurator(c *config.StoreConfig, unmarshal func(interface{}) error) erro
 // Config is the tape config.
 type Config struct {
 	// The storage format ("ltfs", "bltfs", "raw")
-	Format string `yaml:"format"`
+	Format struct {
+		Driver  string
+		Options map[string]string
+	}
 
 	// CleaningPrefix is the prefix that identifies cleaning cartridges.
 	CleaningPrefix string `yaml:"cleaning-prefix"`
@@ -36,6 +39,8 @@ type Config struct {
 
 	// Drives contains configuration for the drives.
 	Drives struct {
+		Format FormatConfig
+
 		Read  map[string]DriveConfig
 		Write map[string]DriveConfig
 	}
@@ -49,7 +54,11 @@ type ChangerConfig struct {
 
 // DriveConfig holds configuration for drives.
 type DriveConfig struct {
-	Slot    int
-	Driver  string
+	Slot int
+	Path string
+}
+
+type FormatConfig struct {
+	Backend string
 	Options map[string]string
 }

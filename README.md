@@ -12,9 +12,16 @@ Tapr is not ready for production use.
 
 ## Usage
 
+### Installation
+
+Tapr can be installed using the standard Go tool chain.
+
+    go get tapr.space/cmd/...
+
+
 ### Server
 
-   taprd -log debug -audit -dbreset
+    taprd -log debug -audit -dbreset
 
 
 ### Client
@@ -24,7 +31,3 @@ Tapr is not ready for production use.
     tapr get -dest /tmp <big-file>
 
 
-### Administrative client
-
-Tail logs
-    tapr log -tail

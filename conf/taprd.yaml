@@ -2,18 +2,18 @@ stores: {
   "default": {
     backend: "store/fs",
 
-    root: "/tmp/tapr"
+    root: "/srv/tapr/store/fs"
   },
 
   "archive": {
     backend: "store/tape",
-    format: "ltfs",
 
     cleaning-prefix: "CLN",
 
     inventory: {
       driver: "postgres",
       options: {
+        dbhost: "10.0.2.2",
         dbname: "tapr",
         username: "tapr",
         password: "secret"
@@ -27,33 +27,40 @@ stores: {
           transfer: 4,
           storage: 32,
           ix: 4,
-          volumes: 16,
+          volumes: 16
         }
       }
     },
 
     drives: {
+      format: {
+        backend: "ltfs",
+        options: {
+          mountdir: "/srv/tapr/store/ltfs",
+        }
+      },
+
       read: {
-        "st0": {
-          slot: 0,
-          driver: "fake",
+        "read0": {
+          path: "/srv/tapr/dev/st0",
+          slot: 0
         },
 
-        "st1": {
-          slot: 1,
-          driver: "fake",
+        "read1": {
+          path: "/srv/tapr/dev/st1",
+          slot: 1
         },
       },
 
       write: {
-        "st2": {
-          slot: 2,
-          driver: "fake",
+        "write0": {
+          path: "/srv/tapr/dev/st2",
+          slot: 2
         },
 
-        "st3": {
-          slot: 3,
-          driver: "fake",
+        "write1": {
+          path: "/srv/tapr/dev/st3",
+          slot: 3
         }
       }
     }

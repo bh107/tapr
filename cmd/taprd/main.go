@@ -24,8 +24,8 @@ import (
 	_ "tapr.space/store/tape/changer/fake"
 	_ "tapr.space/store/tape/changer/mtx"
 
-	// drive implementation
-	_ "tapr.space/store/tape/drive/fake"
+	// format implementations
+	_ "tapr.space/format/ltfs"
 )
 
 func main() {
@@ -52,7 +52,7 @@ func main() {
 	}
 
 	for name, cfg := range srvConfig.Stores {
-		stg, err := store.Create(name, cfg.Backend, cfg)
+		stg, err := store.Create(name, cfg)
 		if err != nil {
 			log.Fatal(err)
 		}

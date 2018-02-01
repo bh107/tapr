@@ -36,6 +36,9 @@ const (
 
 	// StatusNeedsCleaning tells us that the volume needs cleaning.
 	StatusNeedsCleaning
+
+	// StatusFormatted is set when the volume has already been formatted
+	StatusFormatted
 )
 
 // FormatVolumeFlags formats the flags for human consumption.
@@ -51,6 +54,10 @@ func FormatVolumeFlags(f uint32) string {
 
 	if bitmask.IsSet(f, StatusNeedsCleaning) {
 		out = append(out, "needs-cleaning")
+	}
+
+	if bitmask.IsSet(f, StatusFormatted) {
+		out = append(out, "formatted")
 	}
 
 	return strings.Join(out, ",")

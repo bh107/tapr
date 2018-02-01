@@ -7,6 +7,7 @@ import (
 	"tapr.space"
 	"tapr.space/config"
 	"tapr.space/flags"
+	"tapr.space/format"
 	"tapr.space/log"
 	"tapr.space/store"
 	"tapr.space/store/tape"
@@ -21,20 +22,19 @@ func init() {
 
 type service struct {
 	name string
-	data *dataService
-}
 
-type dataService struct {
 	inv    inv.Inventory
 	chgr   changer.Changer
-	drives map[string]drive.Drive
+	drives map[string]*drive.Drive
+
+	fmtr format.Formatter
 }
 
 var _ store.Store = (*service)(nil)
 
 // New creates a new store.Store service.
 func New(name string, _cfg config.StoreConfig) (store.Store, error) {
-	op := "store/tapr/service.New[" + name + "]"
+	op := "store/tape/service.New[" + name + "]"
 	cfg := _cfg.Embedded.(tape.Config)
 
 	// setup inventory
@@ -50,6 +50,7 @@ func New(name string, _cfg config.StoreConfig) (store.Store, error) {
 		log.Fatal(err)
 	}
 
+	// reset the database if requested
 	if flags.ResetDB {
 		log.Debug.Printf("%s: resetting inventory database", op)
 		if err := invdb.Reset(); err != nil {
@@ -72,6 +73,7 @@ func New(name string, _cfg config.StoreConfig) (store.Store, error) {
 		log.Fatal(err)
 	}
 
+	// perform an audit if requested
 	if flags.Audit {
 		log.Debug.Printf("%s: auditing inventory", op)
 		if err := invdb.Audit(chgr); err != nil {
@@ -79,23 +81,31 @@ func New(name string, _cfg config.StoreConfig) (store.Store, error) {
 		}
 	}
 
+	fmtr, err := format.Create(cfg.Drives.Format)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	// setup drives
-	drvs := map[string]drive.Drive{}
 	var wg sync.WaitGroup
-	for name, drvCfg := range cfg.Drives.Write {
-		drv, err := drive.Create(name, drvCfg.Driver, drvCfg)
+	drvs := make(map[string]*drive.Drive)
+	for name, cfg := range cfg.Drives.Write {
+		drv, err := drive.New(name, cfg)
 		if err != nil {
 			log.Fatal(err)
 		}
 
+		drvs[name] = drv
+
 		wg.Add(1)
 
 		go func() {
-			drv.Setup(invdb, chgr)
+			if err := drv.Start(invdb, chgr, fmtr); err != nil {
+				log.Fatal(err)
+			}
+
 			wg.Done()
 		}()
-
-		drvs[name] = drv
 	}
 
 	wg.Wait()
@@ -103,12 +113,11 @@ func New(name string, _cfg config.StoreConfig) (store.Store, error) {
 	log.Debug.Printf("%s: drives ready", op)
 
 	return &service{
-		name: name,
-		data: &dataService{
-			inv:    invdb,
-			chgr:   chgr,
-			drives: drvs,
-		},
+		name:   name,
+		inv:    invdb,
+		chgr:   chgr,
+		drives: drvs,
+		fmtr:   fmtr,
 	}, nil
 }
 
@@ -125,7 +134,7 @@ func (s *service) Open(name tapr.PathName) (tapr.File, error) {
 }
 
 func (s *service) OpenFile(name tapr.PathName, flag int) (tapr.File, error) {
-	panic("not implemented")
+	return s.drives["write0"].Storage.OpenFile(name, flag)
 }
 
 func (s *service) Append(name tapr.PathName) (tapr.File, error) {

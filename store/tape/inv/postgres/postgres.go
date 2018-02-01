@@ -64,7 +64,7 @@ func New(opts map[string]string) (inv.Inventory, error) {
 	const op = "inv/postgres.New"
 
 	requiredOpts := []string{
-		"dbname", "username", "password", "cleaning-prefix",
+		"dbhost", "dbname", "username", "password", "cleaning-prefix",
 	}
 
 	for _, opt := range requiredOpts {
@@ -73,8 +73,8 @@ func New(opts map[string]string) (inv.Inventory, error) {
 		}
 	}
 
-	dsn := fmt.Sprintf("dbname=%s user=%s password=%s",
-		opts["dbname"], opts["username"], opts["password"],
+	dsn := fmt.Sprintf("host=%s dbname=%s user=%s password=%s sslmode=disable",
+		opts["dbhost"], opts["dbname"], opts["username"], opts["password"],
 	)
 
 	db, err := sqlx.Connect("postgres", dsn)
@@ -417,13 +417,13 @@ func (p *postgres) Transfer(serial tape.Serial, dst tape.Location, chgr changer.
 	return nil
 }
 
-func (p *postgres) Loaded(loc tape.Location) (bool, error) {
+func (p *postgres) Loaded(loc tape.Location) (loaded bool, vol tape.Volume, err error) {
 	const op = "inv/postgres.Loaded"
 
-	var r int
+	var r rvol
 
-	err := p.db.Get(&r, `
-		SELECT 1
+	err = p.db.Get(&r, `
+		SELECT serial, location, home, category, flags
 		FROM volumes
 		WHERE
 			location = ($1::integer,slot_category('transfer'))
@@ -431,14 +431,44 @@ func (p *postgres) Loaded(loc tape.Location) (bool, error) {
 
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return false, nil
+			return false, vol, nil
 		}
 
 		log.Error.Print(loc)
-		return false, errors.E(op, err)
+		return false, vol, errors.E(op, err)
 	}
 
-	return true, nil
+	return true, tape.Volume{
+		Serial:   r.Serial,
+		Location: r.Location,
+		Home:     r.Home,
+		Category: r.Category,
+		Flags:    r.Flags,
+	}, nil
+}
+
+func (p *postgres) Info(serial tape.Serial) (tape.Volume, error) {
+	const op = "inv/postgres.Info"
+
+	var r rvol
+
+	err := p.db.Get(&r, `
+		SELECT serial, location, home, category, flags
+		FROM volumes
+		WHERE serial = $1
+	`, serial)
+
+	if err != nil {
+		return tape.Volume{}, err
+	}
+
+	return tape.Volume{
+		Serial:   r.Serial,
+		Location: r.Location,
+		Home:     r.Home,
+		Category: r.Category,
+		Flags:    r.Flags,
+	}, nil
 }
 
 func (p *postgres) Alloc() (vol tape.Volume, err error) {
@@ -452,7 +482,7 @@ func (p *postgres) Alloc() (vol tape.Volume, err error) {
 	var r rvol
 
 	stmt := `
-		SELECT serial, location, category, flags
+		SELECT serial, location, home, category, flags
 		FROM volumes
 		WHERE category IN ('filling', 'scratch')
 		  AND (location).category = 'storage'
@@ -482,8 +512,9 @@ func (p *postgres) Alloc() (vol tape.Volume, err error) {
 	}
 
 	return tape.Volume{
-		Serial:   tape.Serial(r.Serial),
+		Serial:   r.Serial,
 		Location: r.Location,
+		Home:     r.Home,
 		Category: r.Category,
 		Flags:    r.Flags,
 	}, nil

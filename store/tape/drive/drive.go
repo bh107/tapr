@@ -1,71 +1,94 @@
 package drive // import "tapr.space/store/tape/drive"
 
 import (
-	"tapr.space/errors"
+	"fmt"
+	"os"
+
+	"tapr.space/flags"
+	"tapr.space/format"
 	"tapr.space/log"
+	"tapr.space/storage"
 	"tapr.space/store/tape"
 	"tapr.space/store/tape/changer"
 	"tapr.space/store/tape/inv"
 )
 
-// Launch launches a new iodev process, managing a mounted volume.
-func Launch(loc tape.Location, vol *tape.Volume, invdb inv.Inventory, chgr changer.Changer) error {
-	const op = "iodev.Create"
+// Drive represents a tape drive.
+type Drive struct {
+	devpath string
+	serial  string
 
-	if vol == nil {
+	name string
+	loc  tape.Location
+
+	storage.Storage
+}
+
+// New returns a new fake tape drive implementation.
+func New(name string, cfg tape.DriveConfig) (*Drive, error) {
+	op := fmt.Sprintf("drive/Drive.New[%s (slot %d) (path %s)]", name, cfg.Slot, cfg.Path)
+
+	if flags.EmulateDevices {
+		if err := os.MkdirAll(cfg.Path, os.ModePerm); err != nil {
+			return nil, err
+		}
+	}
+
+	loc := tape.Location{
+		Addr:     tape.Addr(cfg.Slot),
+		Category: tape.TransferSlot,
+	}
+
+	log.Debug.Printf("%s: created", op)
+
+	drv := &Drive{
+		devpath: cfg.Path,
+		name:    name,
+		loc:     loc,
+	}
+
+	return drv, nil
+}
+
+// Start the drive.
+func (drv *Drive) Start(invdb inv.Inventory, chgr changer.Changer, fmtr format.Formatter) error {
+	op := fmt.Sprintf("drive/fake.Setup[%s (slot %d) (path %s)]", drv.name, drv.loc.Addr, drv.devpath)
+
+	loaded, vol, err := invdb.Loaded(drv.loc)
+	if err != nil {
+		return err
+	}
+
+	if !loaded {
+		log.Debug.Printf("%s: drive is empty, allocating", op)
 		// get a volume from the inventory if we do not already have a
 		// volume mounted
-		v, err := invdb.Alloc()
+		vol, err = invdb.Alloc()
 		if err != nil {
 			return err
 		}
 
-		log.Debug.Printf("%s: loading %v into %v", op, v, loc)
+		log.Debug.Printf("%s: loading %v into %v", op, vol.Serial, drv.loc)
 
-		if err := invdb.Load(v.Serial, loc, chgr); err != nil {
+		if err := invdb.Load(vol.Serial, drv.loc, chgr); err != nil {
 			return err
 		}
-
-		log.Debug.Printf("%s: loaded %v into %v", op, v, loc)
-
-		return nil
 	}
 
-	log.Debug.Printf("%s: volume %v already loaded in %v", op, vol, loc)
+	// format the volume
+	stg, err := fmtr.Format(drv.devpath, vol.Serial)
+	if err != nil {
+		return err
+	}
+
+	// mount if needed
+	if mounter, ok := stg.(format.Mounter); ok {
+		if err := mounter.Mount(); err != nil {
+			return err
+		}
+	}
+
+	drv.Storage = stg
 
 	return nil
-}
-
-// Constructor is a function that creates a Drive.
-type Constructor func(name string, cfg tape.DriveConfig) (Drive, error)
-
-var registration = make(map[string]Constructor)
-
-// Register registers a new drive.Drive implementation.
-func Register(name string, fn Constructor) error {
-	const op = "drive.Register"
-	if _, exists := registration[name]; exists {
-		return errors.E(op, errors.Exist)
-	}
-
-	registration[name] = fn
-
-	return nil
-}
-
-// A Drive is a tape drive.
-type Drive interface {
-	Setup(inv.Inventory, changer.Changer)
-}
-
-// Create creates a new Drive using the named implementation.
-func Create(name, backend string, cfg tape.DriveConfig) (Drive, error) {
-	const op = "drive.Create"
-
-	fn, found := registration[backend]
-	if !found {
-		return nil, errors.E(op, errors.Invalid, errors.Strf("unknown drive backend type: %v", backend))
-	}
-
-	return fn(name, cfg)
 }

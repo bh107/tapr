@@ -76,7 +76,7 @@ var None = []string{}
 // Server is the set of flags most useful in servers. It can be passed as the
 // argument to Parse to set up the package for a server.
 var Server = []string{
-	"config", "log", "simulate", "dbreset", "audit", "serverconfig",
+	"log", "simulate", "emulate-dev", "dbreset", "audit", "serverconfig",
 }
 
 // Client is the set of flags most useful in clients. It can be passed as the
@@ -86,7 +86,7 @@ var Client = []string{
 }
 
 var (
-	// Config ("config") names the Upspin configuration file to use.
+	// Config ("config") names the configuration file to use.
 	Config = defaultConfigFile
 
 	// ServerConfigFile is the server configuration file
@@ -109,8 +109,11 @@ var (
 	// ResetDB ("dbreset") resets the inventory database
 	ResetDB = false
 
-	// Simulate ("simulate") enabled simulation
+	// Simulate ("simulate") enable simulation
 	Simulate = false
+
+	// EmulateDevices ("emulate-dev") enable emulation of devices
+	EmulateDevices = false
 
 	// Version causes the program to print its release version and exit.
 	// The printed version is only meaningful in released binaries.
@@ -137,8 +140,9 @@ var flags = map[string]*flagVar{
 
 	"serverconfig": strVar(&ServerConfigFile, "serverconfig", ServerConfigFile, "server configuration `file`"),
 
-	"simulate": boolVar(&Simulate, "simulate", false, "whether to enable simulation of operations"),
-	"version":  boolVar(&Version, "version", false, "print build version and exit"),
+	"simulate":    boolVar(&Simulate, "simulate", false, "whether to enable simulation of operations"),
+	"emulate-dev": boolVar(&EmulateDevices, "emulate-dev", false, "whether to enable emulation of devices"),
+	"version":     boolVar(&Version, "version", false, "print build version and exit"),
 }
 
 // Parse registers the command-line flags for the given default flags list, plus

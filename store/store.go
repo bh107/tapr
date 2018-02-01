@@ -34,16 +34,13 @@ type Store interface {
 	storage.Storage
 }
 
-// Config is a store configuration. It is implementation dependent.
-type Config interface{}
-
 // Create creates a new store using the given named implementation.
-func Create(name, backend string, cfg config.StoreConfig) (Store, error) {
+func Create(name string, cfg config.StoreConfig) (Store, error) {
 	const op = "store.Create"
 
-	fn, found := registration[backend]
+	fn, found := registration[cfg.Backend]
 	if !found {
-		return nil, errors.E(op, errors.Invalid, errors.Strf("unknown store backend type: %v", backend))
+		return nil, errors.E(op, errors.Invalid, errors.Strf("unknown store backend type: %v", cfg.Backend))
 	}
 
 	return fn(name, cfg)
