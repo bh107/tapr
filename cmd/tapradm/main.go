@@ -40,9 +40,9 @@ import (
 	"sort"
 	"strings"
 
-	"hpt.space/tapr/config"
-	"hpt.space/tapr/flags"
-	"hpt.space/tapr/subcmd"
+	"tapr.space/config"
+	"tapr.space/flags"
+	"tapr.space/subcmd"
 )
 
 const intro = `

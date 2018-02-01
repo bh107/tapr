@@ -1,14 +1,14 @@
-package ioserver // import "hpt.space/tapr/rpc/ioserver"
+package ioserver // import "tapr.space/rpc/ioserver"
 
 import (
 	"fmt"
 	"net/http"
 	"sync"
 
-	"hpt.space/tapr"
-	"hpt.space/tapr/log"
-	"hpt.space/tapr/rpc"
-	"hpt.space/tapr/store"
+	"tapr.space"
+	"tapr.space/log"
+	"tapr.space/rpc"
+	"tapr.space/store"
 )
 
 type server struct {

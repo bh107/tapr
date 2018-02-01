@@ -1,4 +1,4 @@
-package invserver // import "hpt.space/tapr/rpc/invserver"
+package invserver // import "tapr.space/rpc/invserver"
 
 import (
 	"fmt"
@@ -6,12 +6,12 @@ import (
 
 	pb "github.com/golang/protobuf/proto"
 
-	"hpt.space/tapr"
-	"hpt.space/tapr/errors"
-	"hpt.space/tapr/log"
-	"hpt.space/tapr/rpc"
-	"hpt.space/tapr/store/tape/inv"
-	"hpt.space/tapr/store/tape/proto"
+	"tapr.space"
+	"tapr.space/errors"
+	"tapr.space/log"
+	"tapr.space/rpc"
+	"tapr.space/store/tape/inv"
+	"tapr.space/store/tape/proto"
 )
 
 type server struct {

@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"syscall"
 
-	"hpt.space/tapr/errors"
+	"tapr.space/errors"
 )
 
 const (

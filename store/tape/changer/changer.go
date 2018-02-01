@@ -1,8 +1,8 @@
 package changer
 
 import (
-	"hpt.space/tapr/errors"
-	"hpt.space/tapr/store/tape"
+	"tapr.space/errors"
+	"tapr.space/store/tape"
 )
 
 // Constructor is a function that creates a Changer.

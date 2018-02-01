@@ -1,5 +1,5 @@
 // Package postgres implements a PostgreSQL backed inv.Inventory.
-package postgres // import "hpt.space/tapr/store/tape/inv/postgres"
+package postgres // import "tapr.space/store/tape/inv/postgres"
 
 import (
 	"database/sql"
@@ -10,13 +10,13 @@ import (
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq" // side-effect: register postgresql driver
 
-	"hpt.space/tapr"
-	"hpt.space/tapr/bitmask"
-	"hpt.space/tapr/errors"
-	"hpt.space/tapr/log"
-	"hpt.space/tapr/store/tape"
-	"hpt.space/tapr/store/tape/changer"
-	"hpt.space/tapr/store/tape/inv"
+	"tapr.space"
+	"tapr.space/bitmask"
+	"tapr.space/errors"
+	"tapr.space/log"
+	"tapr.space/store/tape"
+	"tapr.space/store/tape/changer"
+	"tapr.space/store/tape/inv"
 )
 
 func init() {

@@ -28,7 +28,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // Package errors defines the error handling used by corpus.
-package errors // import "hpt.space/tapr/errors"
+package errors // import "tapr.space/errors"
 
 import (
 	"bytes"
@@ -37,8 +37,8 @@ import (
 	"fmt"
 	"runtime"
 
-	"hpt.space/tapr"
-	"hpt.space/tapr/log"
+	"tapr.space"
+	"tapr.space/log"
 )
 
 // Error is the type that implements the error interface.

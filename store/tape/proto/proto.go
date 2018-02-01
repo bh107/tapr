@@ -1,6 +1,6 @@
-package proto // import "hpt.space/tapr/store/tape/proto"
+package proto // import "tapr.space/store/tape/proto"
 
-import "hpt.space/tapr/store/tape"
+import "tapr.space/store/tape"
 
 // To regenerate the protocol buffer output for this package, run
 //      go generate

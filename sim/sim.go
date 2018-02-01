@@ -5,7 +5,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"hpt.space/tapr/log"
+	"tapr.space/log"
 )
 
 var enabled int32 // read/written atomically

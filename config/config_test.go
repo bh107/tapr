@@ -1,8 +1,8 @@
 package config_test
 
 import (
-	_ "hpt.space/tapr/store/fs"
-	_ "hpt.space/tapr/store/tape"
+	_ "tapr.space/store/fs"
+	_ "tapr.space/store/tape"
 )
 
 const rawConfig = `

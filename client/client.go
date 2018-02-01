@@ -1,5 +1,5 @@
 // Package client implements a tapr.Client.
-package client // import "hpt.space/tapr/client"
+package client // import "tapr.space/client"
 
 import (
 	"encoding/binary"
@@ -7,11 +7,11 @@ import (
 
 	pb "github.com/golang/protobuf/proto"
 
-	"hpt.space/tapr"
-	"hpt.space/tapr/errors"
-	"hpt.space/tapr/log"
-	"hpt.space/tapr/proto"
-	"hpt.space/tapr/rpc"
+	"tapr.space"
+	"tapr.space/errors"
+	"tapr.space/log"
+	"tapr.space/proto"
+	"tapr.space/rpc"
 )
 
 // Client implements tapr.Client.

@@ -4,10 +4,10 @@ package service
 import (
 	"os"
 
-	"hpt.space/tapr/config"
-	"hpt.space/tapr/log"
-	"hpt.space/tapr/storage/fsdir"
-	"hpt.space/tapr/store"
+	"tapr.space/config"
+	"tapr.space/log"
+	"tapr.space/storage/fsdir"
+	"tapr.space/store"
 )
 
 func init() {

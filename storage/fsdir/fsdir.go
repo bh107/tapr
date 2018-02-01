@@ -6,8 +6,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"hpt.space/tapr"
-	"hpt.space/tapr/storage"
+	"tapr.space"
+	"tapr.space/storage"
 )
 
 type Storage struct {

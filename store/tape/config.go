@@ -1,6 +1,6 @@
 package tape
 
-import "hpt.space/tapr/config"
+import "tapr.space/config"
 
 func init() {
 	config.Register("store/tape", configurator)

@@ -3,7 +3,7 @@ package bitmask_test
 import (
 	"testing"
 
-	"hpt.space/tapr/bitmask"
+	"tapr.space/bitmask"
 )
 
 const (

@@ -1,11 +1,11 @@
 package client
 
 import (
-	"hpt.space/tapr"
-	"hpt.space/tapr/mgnt"
-	"hpt.space/tapr/rpc"
-	"hpt.space/tapr/store/tape"
-	"hpt.space/tapr/store/tape/proto"
+	"tapr.space"
+	"tapr.space/mgnt"
+	"tapr.space/rpc"
+	"tapr.space/store/tape"
+	"tapr.space/store/tape/proto"
 )
 
 // ManagementClient implements mgnt.Client

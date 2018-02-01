@@ -1,1 +1,1 @@
-package tape // import "hpt.space/tapr/store/tape"
+package tape // import "tapr.space/store/tape"

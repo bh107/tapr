@@ -1,11 +1,11 @@
-package drive // import "hpt.space/tapr/store/tape/drive"
+package drive // import "tapr.space/store/tape/drive"
 
 import (
-	"hpt.space/tapr/errors"
-	"hpt.space/tapr/log"
-	"hpt.space/tapr/store/tape"
-	"hpt.space/tapr/store/tape/changer"
-	"hpt.space/tapr/store/tape/inv"
+	"tapr.space/errors"
+	"tapr.space/log"
+	"tapr.space/store/tape"
+	"tapr.space/store/tape/changer"
+	"tapr.space/store/tape/inv"
 )
 
 // Launch launches a new iodev process, managing a mounted volume.

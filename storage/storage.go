@@ -1,9 +1,9 @@
-package storage // import "hpt.space/tapr/storage"
+package storage // import "tapr.space/storage"
 
 import (
 	"os"
 
-	"hpt.space/tapr"
+	"tapr.space"
 )
 
 // Storage is the storage interface.

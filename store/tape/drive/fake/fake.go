@@ -1,14 +1,14 @@
 // Package fake provides a fake tape drive implementation.
-package fake // import "hpt.space/tapr/store/tape/drive/fake"
+package fake // import "tapr.space/store/tape/drive/fake"
 
 import (
 	"fmt"
 
-	"hpt.space/tapr/log"
-	"hpt.space/tapr/store/tape"
-	"hpt.space/tapr/store/tape/changer"
-	"hpt.space/tapr/store/tape/drive"
-	"hpt.space/tapr/store/tape/inv"
+	"tapr.space/log"
+	"tapr.space/store/tape"
+	"tapr.space/store/tape/changer"
+	"tapr.space/store/tape/drive"
+	"tapr.space/store/tape/inv"
 )
 
 func init() {

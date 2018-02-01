@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"hpt.space/tapr/bitmask"
+	"tapr.space/bitmask"
 )
 
 // A Serial is the volume serial number (VOLSER) of a tape.

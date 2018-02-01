@@ -1,11 +1,11 @@
 // Package store defines the interfaces that implements the basic
 // 'store' abstraction.
-package store // import "hpt.space/tapr/store"
+package store // import "tapr.space/store"
 
 import (
-	"hpt.space/tapr/config"
-	"hpt.space/tapr/errors"
-	"hpt.space/tapr/storage"
+	"tapr.space/config"
+	"tapr.space/errors"
+	"tapr.space/storage"
 )
 
 // A Constructor is a function that creates a Store.

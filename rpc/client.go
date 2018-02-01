@@ -27,7 +27,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-package rpc // import "hpt.space/tapr/rpc"
+package rpc // import "tapr.space/rpc"
 
 import (
 	"bytes"
@@ -38,10 +38,10 @@ import (
 
 	pb "github.com/golang/protobuf/proto"
 
-	"hpt.space/tapr"
-	"hpt.space/tapr/errors"
-	"hpt.space/tapr/flags"
-	"hpt.space/tapr/log"
+	"tapr.space"
+	"tapr.space/errors"
+	"tapr.space/flags"
+	"tapr.space/log"
 )
 
 // Client is a partial tapr.Service that uses HTTP as a transport

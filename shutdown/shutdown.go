@@ -29,7 +29,7 @@
 
 // Package shutdown provides a mechanism for registering handlers to be called
 // on process shutdown.
-package shutdown // import "hpt.space/tapr/shutdown"
+package shutdown // import "tapr.space/shutdown"
 
 import (
 	"fmt"
@@ -39,7 +39,7 @@ import (
 	"syscall"
 	"time"
 
-	"hpt.space/tapr/log"
+	"tapr.space/log"
 )
 
 // GracePeriod specifies the maximum amount of time during which all shutdown

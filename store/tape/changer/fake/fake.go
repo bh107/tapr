@@ -7,11 +7,11 @@ import (
 	"sync"
 	"time"
 
-	"hpt.space/tapr/bitmask"
-	"hpt.space/tapr/errors"
-	"hpt.space/tapr/sim"
-	"hpt.space/tapr/store/tape"
-	"hpt.space/tapr/store/tape/changer"
+	"tapr.space/bitmask"
+	"tapr.space/errors"
+	"tapr.space/sim"
+	"tapr.space/store/tape"
+	"tapr.space/store/tape/changer"
 )
 
 func init() {

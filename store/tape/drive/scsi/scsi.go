@@ -1,12 +1,12 @@
 // Package scsi provides a SCSI tape drive implementation.
-package scsi // import "hpt.space/tapr/store/tape/drive/scsi"
+package scsi // import "tapr.space/store/tape/drive/scsi"
 
 import (
-	"hpt.space/tapr/errors"
-	"hpt.space/tapr/store/tape"
-	"hpt.space/tapr/store/tape/changer"
-	"hpt.space/tapr/store/tape/drive"
-	"hpt.space/tapr/store/tape/inv"
+	"tapr.space/errors"
+	"tapr.space/store/tape"
+	"tapr.space/store/tape/changer"
+	"tapr.space/store/tape/drive"
+	"tapr.space/store/tape/inv"
 )
 
 func init() {

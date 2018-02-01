@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	"hpt.space/tapr"
-	"hpt.space/tapr/store"
+	"tapr.space"
+	"tapr.space/store"
 )
 
 type service struct {

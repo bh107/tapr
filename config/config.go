@@ -27,7 +27,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-package config // import "hpt.space/tapr/config"
+package config // import "tapr.space/config"
 
 import (
 	"io"
@@ -37,8 +37,8 @@ import (
 
 	yaml "gopkg.in/yaml.v2"
 
-	"hpt.space/tapr"
-	"hpt.space/tapr/errors"
+	"tapr.space"
+	"tapr.space/errors"
 )
 
 // A StoreConfigurator is a function that given a raw config YAML value

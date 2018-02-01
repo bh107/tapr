@@ -29,14 +29,14 @@
 
 // Package metric implements routines for generating and saving metrics
 // associated with servers and clients.
-package metric // import "hpt.space/tapr/metric"
+package metric // import "tapr.space/metric"
 
 import (
 	"sync"
 	"sync/atomic"
 	"time"
 
-	"hpt.space/tapr/log"
+	"tapr.space/log"
 )
 
 // Metric is a named collection of spans. A span measures time from the

@@ -28,7 +28,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // Package log exports logging primitives that log to stderr.
-package log // import "hpt.space/tapr/log"
+package log // import "tapr.space/log"
 
 import (
 	"fmt"

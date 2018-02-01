@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"hpt.space/tapr"
+	"tapr.space"
 )
 
 func (s *State) push(args ...string) {

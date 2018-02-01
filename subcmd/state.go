@@ -27,16 +27,16 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-package subcmd // import "hpt.space/tapr/subcmd"
+package subcmd // import "tapr.space/subcmd"
 
 import (
 	"fmt"
 	"os"
 
-	"hpt.space/tapr"
-	"hpt.space/tapr/client"
-	"hpt.space/tapr/mgnt"
-	"hpt.space/tapr/shutdown"
+	"tapr.space"
+	"tapr.space/client"
+	"tapr.space/mgnt"
+	"tapr.space/shutdown"
 )
 
 // State describes the state of a subcommand.

@@ -5,11 +5,11 @@ import (
 
 	pb "github.com/golang/protobuf/proto"
 
-	"hpt.space/tapr"
-	"hpt.space/tapr/errors"
-	"hpt.space/tapr/log"
-	"hpt.space/tapr/proto"
-	"hpt.space/tapr/rpc"
+	"tapr.space"
+	"tapr.space/errors"
+	"tapr.space/log"
+	"tapr.space/proto"
+	"tapr.space/rpc"
 )
 
 func (s *server) PullPrepare(reqBytes []byte) (pb.Message, error) {

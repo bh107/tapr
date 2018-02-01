@@ -7,7 +7,7 @@ import (
 	"os"
 	"text/tabwriter"
 
-	"hpt.space/tapr/store/tape"
+	"tapr.space/store/tape"
 )
 
 func (s *State) vol(args ...string) {

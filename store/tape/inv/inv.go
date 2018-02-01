@@ -1,10 +1,10 @@
-package inv // import "hpt.space/tapr/store/tape/inv"
+package inv // import "tapr.space/store/tape/inv"
 
 import (
-	"hpt.space/tapr"
-	"hpt.space/tapr/errors"
-	"hpt.space/tapr/store/tape"
-	"hpt.space/tapr/store/tape/changer"
+	"tapr.space"
+	"tapr.space/errors"
+	"tapr.space/store/tape"
+	"tapr.space/store/tape/changer"
 )
 
 // InventoryConstructor is a function that creates an Inventory.

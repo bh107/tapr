@@ -1,6 +1,6 @@
 package mgnt
 
-import "hpt.space/tapr/store/tape"
+import "tapr.space/store/tape"
 
 // Client defines an administrative interface.
 type Client interface {

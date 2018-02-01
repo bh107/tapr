@@ -1,7 +1,7 @@
 // Package tapr includes the main Tapr types and interfaces.
 //
 // This package MUST NOT import any other Tapr packages.
-package tapr // import "hpt.space/tapr"
+package tapr // import "tapr.space"
 
 import (
 	"io"

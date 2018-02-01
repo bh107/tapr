@@ -1,7 +1,7 @@
-package proto // import "hpt.space/tapr/proto"
+package proto // import "tapr.space/proto"
 
 import (
-	"hpt.space/tapr/log"
+	"tapr.space/log"
 )
 
 // To regenerate the protocol buffer output for this package, run

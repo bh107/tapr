@@ -7,25 +7,25 @@ import (
 	_ "net/http/pprof"
 	"os"
 
-	"hpt.space/tapr/config"
-	"hpt.space/tapr/flags"
-	"hpt.space/tapr/rpc/ioserver"
-	"hpt.space/tapr/sim"
-	"hpt.space/tapr/store"
+	"tapr.space/config"
+	"tapr.space/flags"
+	"tapr.space/rpc/ioserver"
+	"tapr.space/sim"
+	"tapr.space/store"
 
 	// store implementations
-	_ "hpt.space/tapr/store/fs/service"
-	_ "hpt.space/tapr/store/tape/service"
+	_ "tapr.space/store/fs/service"
+	_ "tapr.space/store/tape/service"
 
 	// inventory implementations
-	_ "hpt.space/tapr/store/tape/inv/postgres"
+	_ "tapr.space/store/tape/inv/postgres"
 
 	// changer implementations
-	_ "hpt.space/tapr/store/tape/changer/fake"
-	_ "hpt.space/tapr/store/tape/changer/mtx"
+	_ "tapr.space/store/tape/changer/fake"
+	_ "tapr.space/store/tape/changer/mtx"
 
 	// drive implementation
-	_ "hpt.space/tapr/store/tape/drive/fake"
+	_ "tapr.space/store/tape/drive/fake"
 )
 
 func main() {

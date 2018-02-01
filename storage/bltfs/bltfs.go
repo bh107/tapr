@@ -12,10 +12,10 @@ import (
 	filedebug "hpt.space/bltfs/backend/file"
 	"hpt.space/bltfs/util/fsutil"
 
-	"hpt.space/tapr"
-	"hpt.space/tapr/errors"
-	"hpt.space/tapr/log"
-	"hpt.space/tapr/storage"
+	"tapr.space"
+	"tapr.space/errors"
+	"tapr.space/log"
+	"tapr.space/storage"
 )
 
 type storageImpl struct {

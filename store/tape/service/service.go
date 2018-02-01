@@ -4,15 +4,15 @@ import (
 	"os"
 	"sync"
 
-	"hpt.space/tapr"
-	"hpt.space/tapr/config"
-	"hpt.space/tapr/flags"
-	"hpt.space/tapr/log"
-	"hpt.space/tapr/store"
-	"hpt.space/tapr/store/tape"
-	"hpt.space/tapr/store/tape/changer"
-	"hpt.space/tapr/store/tape/drive"
-	"hpt.space/tapr/store/tape/inv"
+	"tapr.space"
+	"tapr.space/config"
+	"tapr.space/flags"
+	"tapr.space/log"
+	"tapr.space/store"
+	"tapr.space/store/tape"
+	"tapr.space/store/tape/changer"
+	"tapr.space/store/tape/drive"
+	"tapr.space/store/tape/inv"
 )
 
 func init() {

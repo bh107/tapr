@@ -10,9 +10,9 @@ import (
 	"regexp"
 	"strconv"
 
-	"hpt.space/tapr/errors"
-	"hpt.space/tapr/store/tape"
-	"hpt.space/tapr/store/tape/changer"
+	"tapr.space/errors"
+	"tapr.space/store/tape"
+	"tapr.space/store/tape/changer"
 )
 
 func init() {
