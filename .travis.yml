@@ -1,11 +1,25 @@
-os:
-- linux
 language: go
+os:
+  - linux
+
 go:
-- 1.9.x
+- "1.9"
+- master
+
 go_import_path: tapr.space
+
 install: true
-script: go test -short -race ./...
+
+matrix:
+  allow_failures:
+    - go: master
+
+  fast_finish: true
+
 notifications:
-  email:
-  - birkelund@gmail.com
+  email: false
+
+script:
+  - find . -path ./vendor -prune -o -name '*.go' -type f | xargs gofmt -s -l
+  - go test -short -race ./...
+
