@@ -1,0 +1,11 @@
+os:
+- linux
+language: go
+go:
+- 1.9.x
+go_import_path: tapr.space
+install: true
+script: go test -short -race ./...
+notifications:
+  email:
+  - birkelund@gmail.com

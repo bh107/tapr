@@ -1,6 +1,6 @@
 # Tapr
 
-Documentation: [tapr.space](https://hpt.space/tapr/)
+Documentation: [tapr.space](https://tapr.space)
 
 ## About
 
