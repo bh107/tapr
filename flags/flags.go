@@ -127,7 +127,7 @@ var flags = map[string]*flagVar{
 	"http":   strVar(&HTTPAddr, "http", HTTPAddr, "`address` for incoming insecure network connections"),
 	"store":  strVar(&Store, "store", Store, "store to target"),
 
-	"log": &flagVar{
+	"log": {
 		set: func(fs *flag.FlagSet) {
 			Log.Set("info")
 			fs.Var(&Log, "log", "`level` of logging: debug, info, warning, error, disabled")
