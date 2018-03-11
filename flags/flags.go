@@ -1,5 +1,5 @@
 // Copyright 2016 The Upspin Authors. All rights reserved.
-// Copyright 2017 The Tapr Authors. All rights reserved.
+// Copyright 2017 Klaus Birkelund Abildgaard Jensen. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions

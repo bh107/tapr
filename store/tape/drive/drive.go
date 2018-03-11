@@ -1,3 +1,17 @@
+// Copyright 2018 Klaus Birkelund Abildgaard Jensen
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package drive // import "tapr.space/store/tape/drive"
 
 import (
@@ -16,7 +30,7 @@ import (
 // Drive represents a tape drive.
 type Drive struct {
 	devpath string
-	serial  string
+	Serial  tape.Serial
 
 	name string
 	loc  tape.Location
@@ -100,6 +114,7 @@ func (drv *Drive) Start(invdb inv.Inventory, chgr changer.Changer, fmtr format.F
 		}
 	}
 
+	drv.Serial = serial
 	drv.Storage = stg
 
 	return nil
